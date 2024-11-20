@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { SquareTerminal, CodeXml } from 'lucide-react'
 
@@ -13,19 +14,32 @@ import {
 } from './ui/select'
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group'
 import { Button } from './ui/button'
+import { useInterview } from '@/hooks/use-interview'
 
-interface CodeEditorProps {
-  language: string
-}
+const CodeEditor = () => {
+  const [code, setCode] = useState('')
+  const [language, setLanguage] = useState('javascript')
 
-const CodeEditor = ({ language = 'javascript' }: CodeEditorProps) => {
+  const { submitSolution } = useInterview()
+
+  const handleRunCode = () => {
+    // Implement code running logic if needed
+  }
+
+  const handleSubmit = () => {
+    submitSolution(code)
+  }
+
   return (
     <div className='flex flex-col h-full text-white rounded-md overflow-hidden bg-zinc-600'>
       {/* Topbar */}
       <div className='flex items-center justify-between px-3 py-2 bg-zinc-700'>
-        <Select defaultValue='javascript'>
+        <Select
+          defaultValue='javascript'
+          onValueChange={(value) => setLanguage(value)}
+        >
           <SelectTrigger className='max-w-32'>
-            <SelectValue />
+            <SelectValue placeholder='Language' />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -40,10 +54,10 @@ const CodeEditor = ({ language = 'javascript' }: CodeEditorProps) => {
         </Select>
 
         <div className='flex items-center gap-2'>
-          <Button size='sm' className='bg-zinc-800'>
+          <Button size='sm' className='bg-zinc-800' onClick={handleRunCode}>
             Run
           </Button>
-          <Button size='sm' className='bg-green-800'>
+          <Button size='sm' className='bg-green-800' onClick={handleSubmit}>
             Submit
           </Button>
         </div>
@@ -51,7 +65,12 @@ const CodeEditor = ({ language = 'javascript' }: CodeEditorProps) => {
 
       {/* Editor */}
       <div className='h-full overflow-hidden'>
-        <Editor defaultLanguage={language} value={''} theme='vs-dark' />
+        <Editor
+          defaultLanguage={language}
+          value={code}
+          onChange={(value) => setCode(value || '')}
+          theme='vs-dark'
+        />
       </div>
 
       {/* Output */}

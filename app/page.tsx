@@ -1,8 +1,29 @@
-import CodeEditor from '@/components/code_editor'
+'use client'
+
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import CodeEditor from '@/components/code-editor'
 import { Progress } from '@/components/ui/progress'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useInterview } from '@/hooks/use-interview'
+import { useSocket } from '@/contexts/socket-context'
 
 export default function Home() {
+  const searchParams = useSearchParams()
+  const invitationToken = searchParams.get('token')
+  const { isConnected } = useSocket()
+  const { startInterview, currentQuestion } = useInterview()
+
+  useEffect(() => {
+    if (invitationToken && isConnected) {
+      startInterview(invitationToken)
+    }
+  }, [invitationToken, isConnected])
+
+  if (!invitationToken) {
+    return <div>Invalid interview token</div>
+  }
+
   return (
     <main className='flex h-screen font-serif'>
       {/* Coding Problem Section */}
@@ -17,49 +38,14 @@ export default function Home() {
 
         <ScrollArea className='h-[87vh] w-full pr-3'>
           <div className='flex flex-col gap-3'>
-            <p className='bg-zinc-200 rounded p-2'>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis
-              dolore possimus natus rem, dolor fugiat est iure. Voluptatum
-              molestias quibusdam fugiat ducimus. Facilis fugit itaque, quae
-              saepe nemo quisquam. Quae, iure et maiores deserunt est, possimus
-              quas suscipit quia necessitatibus sequi sint veniam ea. Corporis
-              iste voluptatibus vero consectetur velit?
-            </p>
-            <p className='bg-zinc-200 rounded p-2'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab
-              suscipit optio temporibus dicta est esse recusandae autem alias
-              quo quisquam?
-            </p>
-            <p className='bg-zinc-200 rounded p-2'>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis
-              dolore possimus natus rem, dolor fugiat est iure. Voluptatum
-              molestias quibusdam fugiat ducimus. Facilis fugit itaque, quae
-              saepe nemo quisquam. Quae, iure et maiores deserunt est, possimus
-              quas suscipit quia necessitatibus sequi sint veniam ea. Corporis
-              iste voluptatibus vero consectetur velit?
-            </p>
-            <p className='bg-zinc-200 rounded p-2'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab
-              suscipit optio temporibus dicta est esse recusandae autem alias
-              quo quisquam?
-            </p>
-            <p className='bg-zinc-200 rounded p-2'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi
-              recusandae expedita ratione vitae! Obcaecati a nam amet vero?
-              Molestias dolores laboriosam facilis perspiciatis quos vero sunt!
-              Incidunt vel omnis veniam in maxime doloremque cupiditate totam
-              ratione corporis placeat, eos fuga quisquam necessitatibus facere
-              nulla nostrum, voluptates repudiandae enim nemo. Nam repudiandae
-              pariatur accusantium dolorem ullam. Veritatis quidem numquam
-              beatae dolor?
-            </p>
+            <p className='bg-zinc-200 rounded p-2'>{currentQuestion}</p>
           </div>
         </ScrollArea>
       </div>
 
       {/* Code Editor Section */}
       <div className='flex-auto p-2'>
-        <CodeEditor language='typescript' />
+        <CodeEditor />
       </div>
     </main>
   )
