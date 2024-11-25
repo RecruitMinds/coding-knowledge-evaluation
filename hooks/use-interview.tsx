@@ -79,6 +79,6 @@ export function useInterview() {
     error,
     startInterview,
     submitSolution,
-    submitFollowUpAnswer,
+    submitFollowUpAnswer
   }
 }

@@ -17,25 +17,25 @@ const question = {
       input: [[1, 2, 3, 4, 5], 2],
       output: [[1, 2], [3, 4], [5]],
       explanation:
-        'The function takes the array [1, 2, 3, 4, 5] and the integer 2, and returns a new array of arrays, where each inner array has a maximum length of 2.',
+        'The function takes the array [1, 2, 3, 4, 5] and the integer 2, and returns a new array of arrays, where each inner array has a maximum length of 2.'
     },
     {
       input: [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3],
       output: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]],
       explanation:
-        'The function takes the array [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] and the integer 3, and returns a new array of arrays, where each inner array has a maximum length of 3.',
+        'The function takes the array [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] and the integer 3, and returns a new array of arrays, where each inner array has a maximum length of 3.'
     },
     {
       input: [[], 5],
       output: [],
       explanation:
-        'The function takes an empty array and the integer 5, and returns an empty array because there is nothing to chunk.',
-    },
+        'The function takes an empty array and the integer 5, and returns an empty array because there is nothing to chunk.'
+    }
   ],
   constraints: [
     'The input array can be any length, including empty.',
-    'The input integer will always be a positive integer.',
-  ],
+    'The input integer will always be a positive integer.'
+  ]
 }
 
 export default function Home() {
@@ -57,8 +57,8 @@ export default function Home() {
   return (
     <main className='flex h-screen bg-zinc-950'>
       {/* Coding Problem Section */}
-      <div className='flex-none w-full max-w-[600px] border-r border-zinc-800 bg-zinc-900'>
-        <div className='px-6 py-4 border-b border-zinc-800'>
+      <div className='w-full max-w-[600px] flex-none border-r border-zinc-800 bg-zinc-900'>
+        <div className='border-b border-zinc-800 px-6 py-4'>
           {/* <h1 className='text-xl font-semibold text-zinc-50'>
             Coding Exercise
           </h1>
@@ -79,16 +79,14 @@ export default function Home() {
           <div className='mt-4'>
             <Progress value={66} className='h-1.5' />
           </div>
-
         </div>
 
         <ScrollArea className='h-[calc(100vh-100px)] w-full'>
           <div className='flex flex-col gap-8 p-6'>
             {/* Description Section */}
-            <p className='text-zinc-300 leading-relaxed'>
-                {question?.description}
+            <p className='leading-relaxed text-zinc-300'>
+              {question?.description}
             </p>
-            
 
             {/* Examples Section */}
             <div className='space-y-4'>
@@ -97,24 +95,28 @@ export default function Home() {
                 {question.examples.map((example, index) => (
                   <div
                     key={index}
-                    className='bg-zinc-800/50 rounded-lg p-4 space-y-3'
+                    className='space-y-3 rounded-lg bg-zinc-800/50 p-4'
                   >
                     <div className='font-mono text-sm'>
                       <p className='text-zinc-300'>
-                        <span className='font-medium text-zinc-100 mr-2'>
+                        <span className='mr-2 font-medium text-zinc-100'>
                           Input:
                         </span>
-                        <code className='bg-zinc-800 px-1.5 py-0.5 rounded'>{JSON.stringify(example.input)}</code>
+                        <code className='rounded bg-zinc-800 px-1.5 py-0.5'>
+                          {JSON.stringify(example.input)}
+                        </code>
                       </p>
-                      <p className='text-zinc-300 mt-1'>
-                        <span className='font-medium text-zinc-100 mr-2'>
+                      <p className='mt-1 text-zinc-300'>
+                        <span className='mr-2 font-medium text-zinc-100'>
                           Output:
                         </span>
-                        <code className='bg-zinc-800 px-1.5 py-0.5 rounded'>{JSON.stringify(example.output)}</code>
+                        <code className='rounded bg-zinc-800 px-1.5 py-0.5'>
+                          {JSON.stringify(example.output)}
+                        </code>
                       </p>
                     </div>
-                    <p className='text-zinc-400 text-sm'>
-                      <span className='font-medium text-zinc-200 mr-2'>
+                    <p className='text-sm text-zinc-400'>
+                      <span className='mr-2 font-medium text-zinc-200'>
                         Explanation:
                       </span>
                       {example.explanation
@@ -134,10 +136,8 @@ export default function Home() {
 
             {/* Constraints Section */}
             <div className='space-y-4'>
-              <h3 className='text-lg font-medium text-zinc-50'>
-                Constraints:
-              </h3>
-              <ul className='list-disc list-inside space-y-2 text-zinc-400 text-sm'>
+              <h3 className='text-lg font-medium text-zinc-50'>Constraints:</h3>
+              <ul className='list-inside list-disc space-y-2 text-sm text-zinc-400'>
                 {question.constraints.map((constraint, index) => (
                   <li key={index}>{constraint}</li>
                 ))}
@@ -148,7 +148,7 @@ export default function Home() {
       </div>
 
       {/* Code Editor Section */}
-      <div className='flex-auto p-4 bg-zinc-950'>
+      <div className='flex-auto bg-zinc-950 p-4'>
         <CodeEditor />
       </div>
     </main>

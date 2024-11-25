@@ -10,7 +10,7 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
-  isConnected: false,
+  isConnected: false
 })
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const socketInstance = io('http://localhost:3000/interview', {
-      autoConnect: true,
+      autoConnect: true
     })
 
     socketInstance.on('connect', () => {
