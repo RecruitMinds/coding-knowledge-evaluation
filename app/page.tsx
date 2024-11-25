@@ -55,50 +55,66 @@ export default function Home() {
   }
 
   return (
-    <main className='flex h-screen'>
+    <main className='flex h-screen bg-zinc-950'>
       {/* Coding Problem Section */}
-      <div className='flex-none w-full max-w-[554px] border-r py-6 pl-4'>
-        <h1 className='mb-3 text-xl font-bold leading-8'>
-          Coding Exercise
-        </h1>
-        <div className='flex items-center gap-3 mb-6'>
-          <Progress value={66} className='w-[85%] h-4' />
-          <p>2/3</p>
+      <div className='flex-none w-full max-w-[600px] border-r border-zinc-800 bg-zinc-900'>
+        <div className='px-6 py-4 border-b border-zinc-800'>
+          {/* <h1 className='text-xl font-semibold text-zinc-50'>
+            Coding Exercise
+          </h1>
+          <div className='flex items-center gap-3 mt-4'>
+            <Progress value={66} className='w-[85%] h-2' />
+            <p className='text-sm text-zinc-400'>2/3</p>
+          </div> */}
+          <div className='flex items-center justify-between'>
+            <h1 className='text-xl font-semibold text-zinc-50'>
+              Coding Exercise
+            </h1>
+            <div className='flex items-center gap-2 text-sm font-medium'>
+              <span className='text-indigo-400'>2</span>
+              <span className='text-zinc-600'>/</span>
+              <span className='text-zinc-400'>3</span>
+            </div>
+          </div>
+          <div className='mt-4'>
+            <Progress value={66} className='h-1.5' />
+          </div>
+
         </div>
 
-        <ScrollArea className='h-[87vh] w-full pr-4'>
-          <div className='flex flex-col gap-6 p-2'>
+        <ScrollArea className='h-[calc(100vh-100px)] w-full'>
+          <div className='flex flex-col gap-8 p-6'>
             {/* Description Section */}
-            <p className='text-slate-700 leading-relaxed'>
+            <p className='text-zinc-300 leading-relaxed'>
                 {question?.description}
             </p>
             
 
             {/* Examples Section */}
             <div className='space-y-4'>
-              <h3 className='text-lg font-medium text-slate-900'>Examples:</h3>
-              <div className='space-y-6'>
+              <h3 className='text-lg font-medium text-zinc-50'>Examples:</h3>
+              <div className='space-y-4'>
                 {question.examples.map((example, index) => (
                   <div
                     key={index}
-                    className='bg-slate-50 rounded-lg p-4 space-y-2'
+                    className='bg-zinc-800/50 rounded-lg p-4 space-y-3'
                   >
-                    <div className='font-mono'>
-                      <p className='text-slate-600'>
-                        <span className='font-medium text-slate-700 mr-1'>
+                    <div className='font-mono text-sm'>
+                      <p className='text-zinc-300'>
+                        <span className='font-medium text-zinc-100 mr-2'>
                           Input:
                         </span>
-                        <code>{JSON.stringify(example.input)}</code>
+                        <code className='bg-zinc-800 px-1.5 py-0.5 rounded'>{JSON.stringify(example.input)}</code>
                       </p>
-                      <p className='text-slate-600'>
-                        <span className='font-medium text-slate-700 mr-1'>
+                      <p className='text-zinc-300 mt-1'>
+                        <span className='font-medium text-zinc-100 mr-2'>
                           Output:
                         </span>
-                        <code>{JSON.stringify(example.output)}</code>
+                        <code className='bg-zinc-800 px-1.5 py-0.5 rounded'>{JSON.stringify(example.output)}</code>
                       </p>
                     </div>
-                    <p className='text-slate-600'>
-                      <span className='font-medium text-slate-700 mr-1'>
+                    <p className='text-zinc-400 text-sm'>
+                      <span className='font-medium text-zinc-200 mr-2'>
                         Explanation:
                       </span>
                       {example.explanation
@@ -118,10 +134,10 @@ export default function Home() {
 
             {/* Constraints Section */}
             <div className='space-y-4'>
-              <h3 className='text-lg font-medium text-slate-900'>
+              <h3 className='text-lg font-medium text-zinc-50'>
                 Constraints:
               </h3>
-              <ul className='list-disc list-inside space-y-2 text-slate-700'>
+              <ul className='list-disc list-inside space-y-2 text-zinc-400 text-sm'>
                 {question.constraints.map((constraint, index) => (
                   <li key={index}>{constraint}</li>
                 ))}
@@ -132,7 +148,7 @@ export default function Home() {
       </div>
 
       {/* Code Editor Section */}
-      <div className='flex-auto p-2'>
+      <div className='flex-auto p-4 bg-zinc-950'>
         <CodeEditor />
       </div>
     </main>
