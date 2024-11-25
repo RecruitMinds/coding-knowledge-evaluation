@@ -1,13 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useSocket } from '@/contexts/socket-context'
 
+interface Example {
+  input: string
+  output: string
+  explanation: string
+}
+
+interface QuestionResponse {
+  title: string
+  description: string
+  examples: Example[]
+  constraints: string[]
+}
+
 interface Question {
-  question: string
+  question: QuestionResponse
 }
 
 export function useInterview() {
   const { socket, isConnected } = useSocket()
-  const [currentQuestion, setCurrentQuestion] = useState<string>('')
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionResponse>()
   const [followUpQuestion, setFollowUpQuestion] = useState<string>('')
   const [error, setError] = useState<string>('')
 
@@ -15,7 +28,6 @@ export function useInterview() {
     if (!socket) return
 
     socket.on('question', (data: Question) => {
-      console.log('Question', data.question, 'background: #222; color: #bada55')
       setCurrentQuestion(data.question)
     })
 
