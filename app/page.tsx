@@ -1,15 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import CodeEditor from '@/components/code-editor'
-import { Progress } from '@/components/ui/progress'
-import { ScrollArea } from '@/components/ui/scroll-area'
+
+import { Message } from '@/types'
 import { useInterview } from '@/hooks/use-interview'
 import { useSocket } from '@/contexts/socket-context'
 
+import CodeEditor from '@/components/code-editor'
+import QuestionHeader from '@/components/question/question-header'
+import QuestionContent from '@/components/question/question-content'
+import ConsoleOutput from '@/components/code-editor/console-output'
+import TranscriptList from '@/components/transcript/transcript-list'
+import RecordingControls from '@/components/transcript/recording-controls'
+
 // const questionIndex = 0
-// const currentQuestion = {
+// const currentQuestion: any = {
 //   title: 'Array Chunker',
 //   description:
 //     'Write a function that takes an array of integers and an integer as input, and returns a new array of arrays, where each inner array has a maximum length of the input integer.',
@@ -44,6 +50,8 @@ export default function Home() {
   const invitationToken = searchParams.get('token')
   const { isConnected } = useSocket()
   const { startInterview, currentQuestion, questionIndex } = useInterview()
+  const [output, setOutput] = useState('')
+  const [messages, setMessages] = useState<Message[]>([])
 
   useEffect(() => {
     if (invitationToken && isConnected) {
@@ -57,100 +65,31 @@ export default function Home() {
 
   return (
     <main className='flex h-screen bg-zinc-950'>
-      {/* Coding Problem Section */}
       <div className='w-full max-w-[400px] flex-none border-r border-zinc-800 bg-zinc-900 lg:max-w-[500px] 2xl:max-w-[600px]'>
-        <div className='border-b border-zinc-800 px-6 py-4'>
-          <div className='flex items-center justify-between'>
-            <h1 className='text-xl font-semibold text-zinc-50'>
-              Coding Exercise
-            </h1>
-            <div className='flex items-center gap-2 text-sm font-medium'>
-              <span className='text-indigo-400'>{questionIndex + 1}</span>
-              <span className='text-zinc-600'>/</span>
-              <span className='text-zinc-400'>3</span>
-            </div>
-          </div>
-          <div className='mt-4'>
-            <Progress
-              value={((questionIndex + 1) / 3) * 100}
-              className='h-1.5'
-            />
-          </div>
-        </div>
-
-        <ScrollArea className='h-[calc(100vh-100px)] w-full'>
-          {currentQuestion && (
-            <div className='flex flex-col gap-8 p-6'>
-              {/* Description Section */}
-              <p className='leading-relaxed text-zinc-300'>
-                {currentQuestion?.description}
-              </p>
-
-              {/* Examples Section */}
-              <div className='space-y-4'>
-                <h3 className='text-lg font-medium text-zinc-50'>Examples:</h3>
-                <div className='space-y-4'>
-                  {currentQuestion?.examples.map((example, index) => (
-                    <div
-                      key={index}
-                      className='space-y-3 rounded-lg bg-zinc-800/50 p-4'
-                    >
-                      <div className='font-mono text-sm'>
-                        <p className='text-zinc-300'>
-                          <span className='mr-2 font-medium text-zinc-100'>
-                            Input:
-                          </span>
-                          <code className='rounded bg-zinc-800 px-1.5 py-0.5'>
-                            {JSON.stringify(example.input)}
-                          </code>
-                        </p>
-                        <p className='mt-1 text-zinc-300'>
-                          <span className='mr-2 font-medium text-zinc-100'>
-                            Output:
-                          </span>
-                          <code className='rounded bg-zinc-800 px-1.5 py-0.5'>
-                            {JSON.stringify(example.output)}
-                          </code>
-                        </p>
-                      </div>
-                      <p className='text-sm text-zinc-400'>
-                        <span className='mr-2 font-medium text-zinc-200'>
-                          Explanation:
-                        </span>
-                        {example.explanation
-                          .split('. ')
-                          .map((sentence, i, arr) => (
-                            <span key={i}>
-                              {sentence}
-                              {i < arr.length - 1 ? '.' : ''}
-                              {i < arr.length - 1 && <br />}
-                            </span>
-                          ))}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Constraints Section */}
-              <div className='space-y-4'>
-                <h3 className='text-lg font-medium text-zinc-50'>
-                  Constraints:
-                </h3>
-                <ul className='list-inside list-disc space-y-2 text-sm text-zinc-400'>
-                  {currentQuestion?.constraints.map((constraint, index) => (
-                    <li key={index}>{constraint}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </ScrollArea>
+        <QuestionHeader questionIndex={questionIndex} totalQuestions={3} />
+        {currentQuestion && <QuestionContent question={currentQuestion} />}
       </div>
 
-      {/* Code Editor Section */}
       <div className='flex-auto bg-zinc-950 p-4'>
-        <CodeEditor />
+        <div className='flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900'>
+          <CodeEditor />
+
+          <div className='grid h-2/5 grid-cols-5 bg-zinc-900'>
+            <ConsoleOutput output={output} />
+
+            <div className='col-span-2 flex flex-col'>
+              <div className='border-b border-zinc-800 px-4 py-3.5'>
+                <h3 className='text-sm font-medium text-zinc-200'>
+                  Transcript
+                </h3>
+              </div>
+              <div className='flex flex-1 flex-col'>
+                <TranscriptList messages={messages} />
+                <RecordingControls setMessages={setMessages} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   )

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSocket } from '@/contexts/socket-context'
+import { toast } from 'sonner'
 
 interface Example {
   input: string
@@ -44,8 +45,8 @@ export function useInterview() {
     })
 
     socket.on('error', (data: { message: string }) => {
-      console.log('Error', data.message, 'background: #222; color: #bada55')
       setError(data.message)
+      toast.error(data.message)
     })
 
     socket.on('interviewCompleted', () => {
