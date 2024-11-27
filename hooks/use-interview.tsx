@@ -16,11 +16,13 @@ interface QuestionResponse {
 
 interface Question {
   question: QuestionResponse
+  questionIndex: number
 }
 
 export function useInterview() {
   const { socket, isConnected } = useSocket()
   const [currentQuestion, setCurrentQuestion] = useState<QuestionResponse>()
+  const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [followUpQuestion, setFollowUpQuestion] = useState<string>('')
   const [error, setError] = useState<string>('')
 
@@ -29,6 +31,7 @@ export function useInterview() {
 
     socket.on('question', (data: Question) => {
       setCurrentQuestion(data.question)
+      setQuestionIndex(data.questionIndex)
     })
 
     socket.on('followUpQuestion', (question: string) => {
@@ -75,6 +78,7 @@ export function useInterview() {
 
   return {
     currentQuestion,
+    questionIndex,
     followUpQuestion,
     error,
     startInterview,
