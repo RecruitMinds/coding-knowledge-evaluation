@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <main className='flex h-screen bg-zinc-950'>
       {/* Coding Problem Section */}
-      <div className='w-full max-w-[600px] flex-none border-r border-zinc-800 bg-zinc-900'>
+      <div className='w-full max-w-[400px] flex-none border-r border-zinc-800 bg-zinc-900 lg:max-w-[500px] 2xl:max-w-[600px]'>
         <div className='border-b border-zinc-800 px-6 py-4'>
           <div className='flex items-center justify-between'>
             <h1 className='text-xl font-semibold text-zinc-50'>

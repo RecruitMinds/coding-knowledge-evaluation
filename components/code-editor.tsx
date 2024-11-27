@@ -125,7 +125,7 @@ const CodeEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className='flex-1 overflow-hidden border-y border-zinc-800'>
+      <div className='relative flex-1 overflow-hidden border-y border-zinc-800'>
         <Editor
           defaultLanguage={language}
           value={code}
@@ -142,8 +142,10 @@ const CodeEditor = () => {
             renderLineHighlight: 'all',
             smoothScrolling: true,
             cursorBlinking: 'smooth',
-            cursorSmoothCaretAnimation: 'on'
+            cursorSmoothCaretAnimation: 'on',
+            automaticLayout: true
           }}
+          className='absolute h-full w-full'
         />
       </div>
 
@@ -167,24 +169,22 @@ const CodeEditor = () => {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-          <div className='mx-4 my-4 flex-1 rounded-lg bg-zinc-800/50 p-4 font-mono text-sm'>
+          <div className='mx-4 my-4 flex-1 rounded-lg bg-zinc-800/50 p-4 font-mono text-sm text-zinc-400'>
             {output || 'No output yet'}
           </div>
         </div>
 
-        {/* Follow-up Discussion Column */}
+        {/* Transcript Column */}
         <div className='col-span-2 flex flex-col'>
           <div className='border-b border-zinc-800 px-4 py-3.5'>
-            <h3 className='text-sm font-medium text-zinc-200'>
-              Follow-up Discussion
-            </h3>
+            <h3 className='text-sm font-medium text-zinc-200'>Transcript</h3>
           </div>
           <div className='flex flex-1 flex-col'>
             <div className='flex-1 overflow-y-auto'>
               <div className='space-y-4 p-4'>
                 {messages.length === 0 ? (
                   <p className='text-center text-sm text-zinc-500'>
-                    No follow-up questions yet
+                    No transcription
                   </p>
                 ) : (
                   messages.map((message, index) => (
