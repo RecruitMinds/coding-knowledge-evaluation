@@ -74,16 +74,16 @@ export default function Home() {
         <div className='flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900'>
           <CodeEditor />
 
-          <div className='grid h-2/5 grid-cols-5 bg-zinc-900'>
+          <div className='flex h-2/5 bg-zinc-900'>
             <ConsoleOutput output={output} />
 
-            <div className='col-span-2 flex flex-col'>
+            <div className='flex w-2/5 flex-col'>
               <div className='border-b border-zinc-800 px-4 py-3.5'>
                 <h3 className='text-sm font-medium text-zinc-200'>
                   Transcript
                 </h3>
               </div>
-              <div className='flex flex-1 flex-col'>
+              <div className='flex h-[calc(100%-48px)] flex-col'>
                 <TranscriptList messages={messages} />
                 <RecordingControls setMessages={setMessages} />
               </div>

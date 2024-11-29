@@ -1,6 +1,7 @@
 'use client'
 
 import { Message } from '@/types'
+import { ScrollArea } from '../ui/scroll-area'
 
 interface TranscriptListProps {
   messages: Message[]
@@ -8,7 +9,7 @@ interface TranscriptListProps {
 
 const TranscriptList = ({ messages }: TranscriptListProps) => {
   return (
-    <div className='flex-1 overflow-y-auto'>
+    <ScrollArea className='h-full overflow-hidden'>
       <div className='space-y-4 p-4'>
         {messages.length === 0 ? (
           <p className='text-center text-sm text-zinc-500'>No transcription</p>
@@ -33,7 +34,7 @@ const TranscriptList = ({ messages }: TranscriptListProps) => {
           ))
         )}
       </div>
-    </div>
+    </ScrollArea>
   )
 }
 

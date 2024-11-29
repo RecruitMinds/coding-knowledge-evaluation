@@ -7,7 +7,7 @@ interface ConsoleOutputProps {
 
 const ConsoleOutput = ({ output }: ConsoleOutputProps) => {
   return (
-    <div className='col-span-3 flex flex-col border-r border-zinc-800'>
+    <div className='flex flex-1 flex-col border-r border-zinc-800'>
       <div className='border-b border-zinc-800 px-4 py-2'>
         <ToggleGroup
           type='single'
@@ -24,8 +24,10 @@ const ConsoleOutput = ({ output }: ConsoleOutputProps) => {
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
-      <div className='mx-4 my-4 flex-1 rounded-lg bg-zinc-800/50 p-4 font-mono text-sm text-zinc-400'>
-        {output || 'No output yet'}
+      <div className='flex-1 p-4'>
+        <div className='h-full rounded-lg bg-zinc-800/50 p-4 font-mono text-sm text-zinc-400'>
+          {output || 'No output yet'}
+        </div>
       </div>
     </div>
   )

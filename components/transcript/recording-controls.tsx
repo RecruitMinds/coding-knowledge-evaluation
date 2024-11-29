@@ -13,7 +13,7 @@ interface RecordingControlsProps {
 }
 
 const RecordingControls = ({ setMessages }: RecordingControlsProps) => {
-  const [isRecording, setIsRecording] = useState(false)
+  const [isRecording, setIsRecording] = useState(true)
   const [transcript, setTranscript] = useState('')
 
   const { followUpQuestion, submitFollowUpAnswer } = useInterview()
