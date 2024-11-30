@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSocket } from '@/contexts/socket-context'
+import { useSocketStore } from '@/store/use-socket'
 import { toast } from 'sonner'
 
 interface Example {
@@ -21,7 +21,7 @@ interface Question {
 }
 
 export function useInterview() {
-  const { socket, isConnected } = useSocket()
+  const { socket, isConnected } = useSocketStore()
   const [currentQuestion, setCurrentQuestion] = useState<QuestionResponse>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
   const [followUpQuestion, setFollowUpQuestion] = useState<string>('')
@@ -36,11 +36,6 @@ export function useInterview() {
     })
 
     socket.on('followUpQuestion', (question: string) => {
-      console.log(
-        'Follow up question',
-        question,
-        'background: #222; color: #bada55'
-      )
       setFollowUpQuestion(question)
     })
 

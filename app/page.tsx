@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 
 import { Message } from '@/types'
 import { useInterview } from '@/hooks/use-interview'
-import { useSocket } from '@/contexts/socket-context'
+import { useSocketStore } from '@/store/use-socket'
 
 import CodeEditor from '@/components/code-editor'
 import QuestionHeader from '@/components/question/question-header'
@@ -48,7 +48,7 @@ import RecordingControls from '@/components/transcript/recording-controls'
 export default function Home() {
   const searchParams = useSearchParams()
   const invitationToken = searchParams.get('token')
-  const { isConnected } = useSocket()
+  const { isConnected } = useSocketStore()
   const { startInterview, currentQuestion, questionIndex } = useInterview()
   const [output, setOutput] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
