@@ -7,13 +7,13 @@ import { Message } from '@/types'
 import { useInterview } from '@/hooks/use-interview'
 
 import { Button } from '@/components/ui/button'
+import { useDeepgram } from '@/hooks/use-deepgram'
 
 interface RecordingControlsProps {
   setMessages: Dispatch<SetStateAction<Message[]>>
 }
 
 const RecordingControls = ({ setMessages }: RecordingControlsProps) => {
-  const [isRecording, setIsRecording] = useState(true)
   const [transcript, setTranscript] = useState('')
 
   const { followUpQuestion, submitFollowUpAnswer } = useInterview()
@@ -31,7 +31,6 @@ const RecordingControls = ({ setMessages }: RecordingControlsProps) => {
       const utterance = new SpeechSynthesisUtterance(followUpQuestion)
       window.speechSynthesis.speak(utterance)
       // Auto-start recording after question
-      setTimeout(() => setIsRecording(true), 1000)
     }
   }, [followUpQuestion])
 
@@ -45,8 +44,20 @@ const RecordingControls = ({ setMessages }: RecordingControlsProps) => {
     ])
     submitFollowUpAnswer(answer)
     setTranscript('')
-    setIsRecording(false)
   }
+
+  const handleTranscript = (transcript: string) => {
+    setMessages(prev => [
+      ...prev,
+      {
+        type: 'answer',
+        text: transcript
+      }
+    ])
+  }
+
+  const { isRecording, startRecording, stopRecording } =
+    useDeepgram(handleTranscript)
 
   return (
     <div className='border-t border-zinc-800 p-4'>
@@ -62,7 +73,7 @@ const RecordingControls = ({ setMessages }: RecordingControlsProps) => {
               ? 'text-red-400 hover:text-red-500'
               : 'text-zinc-400 hover:text-zinc-300'
           }`}
-          onClick={() => setIsRecording(!isRecording)}
+          onClick={isRecording ? stopRecording : startRecording}
         >
           <Mic className='h-4 w-4' />
           {isRecording ? 'Stop' : 'Start'} Recording
