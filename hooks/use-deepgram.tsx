@@ -1,10 +1,14 @@
 import { useState, useRef, useCallback } from 'react'
-import { createClient, LiveTranscriptionEvents } from '@deepgram/sdk'
+import {
+  createClient,
+  ListenLiveClient,
+  LiveTranscriptionEvents
+} from '@deepgram/sdk'
 
 export const useDeepgram = (onTranscript: (text: string) => void) => {
   const [isRecording, setIsRecording] = useState(false)
   const mediaRecorder = useRef<MediaRecorder | null>(null)
-  const connection = useRef<any>(null)
+  const connection = useRef<ListenLiveClient | null>(null)
   const isConnectionOpen = useRef(false)
 
   const startRecording = useCallback(async () => {
@@ -58,7 +62,7 @@ export const useDeepgram = (onTranscript: (text: string) => void) => {
     }
 
     if (connection.current) {
-      connection.current.finish()
+      connection.current.requestClose()
     }
 
     mediaRecorder.current = null
