@@ -30,7 +30,7 @@ const CodeEditor = () => {
 
       <div className='relative flex-1 overflow-hidden border-y border-zinc-800'>
         <Editor
-          defaultLanguage={language}
+          language={language}
           value={code}
           onChange={value => setCode(value || '')}
           theme='vs-dark'
