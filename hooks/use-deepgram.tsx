@@ -10,18 +10,19 @@ export const useDeepgram = () => {
   const mediaRecorder = useRef<MediaRecorder | null>(null)
   const connection = useRef<ListenLiveClient | null>(null)
   const isConnectionOpen = useRef(false)
+  const transcriptTimer = useRef<NodeJS.Timeout | null>(null)
 
   const {
     setIsRecording,
     addMessage,
     updateLastMessage,
-    setCurrentTranscript
+    setPartialTranscript,
+    clearPartialTranscript
   } = useTranscriptStore()
 
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-
       const deepgram = createClient(process.env.NEXT_PUBLIC_DEEPGRAM_API_KEY!)
 
       connection.current = deepgram.listen.live({
@@ -31,9 +32,7 @@ export const useDeepgram = () => {
       })
 
       connection.current.on(LiveTranscriptionEvents.Open, () => {
-        console.log('Connection opened')
         isConnectionOpen.current = true
-
         mediaRecorder.current = new MediaRecorder(stream)
         mediaRecorder.current.ondataavailable = event => {
           if (event.data.size > 0 && isConnectionOpen.current) {
@@ -47,15 +46,28 @@ export const useDeepgram = () => {
 
       connection.current.on(LiveTranscriptionEvents.Transcript, (data: any) => {
         const transcript = data.channel.alternatives[0].transcript
-        if (transcript) {
-          setCurrentTranscript(transcript)
-          updateLastMessage(transcript)
+        if (transcript && transcript.trim() !== '') {
+          if (data.is_final) {
+            updateLastMessage(transcript)
+
+            if (transcriptTimer.current) {
+              clearTimeout(transcriptTimer.current)
+            }
+
+            transcriptTimer.current = setTimeout(() => {
+              clearPartialTranscript()
+            }, 3000)
+          } else {
+            setPartialTranscript(transcript)
+          }
         }
       })
 
       connection.current.on(LiveTranscriptionEvents.Close, () => {
-        console.log('Connection closed')
         isConnectionOpen.current = false
+        if (transcriptTimer.current) {
+          clearTimeout(transcriptTimer.current)
+        }
       })
     } catch (error) {
       console.error('Error starting recording:', error)
@@ -64,6 +76,9 @@ export const useDeepgram = () => {
 
   const stopRecording = useCallback(() => {
     isConnectionOpen.current = false
+    if (transcriptTimer.current) {
+      clearTimeout(transcriptTimer.current)
+    }
 
     if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
       mediaRecorder.current.stop()
@@ -77,7 +92,7 @@ export const useDeepgram = () => {
     mediaRecorder.current = null
     connection.current = null
     setIsRecording(false)
-    setCurrentTranscript('')
+    clearPartialTranscript()
   }, [])
 
   return {

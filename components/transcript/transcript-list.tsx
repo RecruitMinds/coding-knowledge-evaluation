@@ -4,15 +4,20 @@ import { ScrollArea } from '../ui/scroll-area'
 import { useTranscriptStore } from '@/store/use-transcript-store'
 
 const TranscriptList = () => {
-  const messages = useTranscriptStore(state => state.messages)
+  const { messages, partialTranscript } = useTranscriptStore()
+
+  const allMessages = [...messages]
+  if (partialTranscript.trim()) {
+    allMessages.push({ type: 'answer', text: partialTranscript })
+  }
 
   return (
     <ScrollArea className='h-full overflow-hidden'>
       <div className='space-y-4 p-4'>
-        {messages.length === 0 ? (
+        {allMessages.length === 0 ? (
           <p className='text-center text-sm text-zinc-500'>No transcription</p>
         ) : (
-          messages.map((message, index) => (
+          allMessages.map((message, index) => (
             <div
               key={index}
               className={`flex flex-col ${
