@@ -1,15 +1,22 @@
-import { useState, useRef, useCallback } from 'react'
+import { useRef, useCallback } from 'react'
 import {
   createClient,
   ListenLiveClient,
   LiveTranscriptionEvents
 } from '@deepgram/sdk'
+import { useTranscriptStore } from '@/store/use-transcript-store'
 
-export const useDeepgram = (onTranscript: (text: string) => void) => {
-  const [isRecording, setIsRecording] = useState(false)
+export const useDeepgram = () => {
   const mediaRecorder = useRef<MediaRecorder | null>(null)
   const connection = useRef<ListenLiveClient | null>(null)
   const isConnectionOpen = useRef(false)
+
+  const {
+    setIsRecording,
+    addMessage,
+    updateLastMessage,
+    setCurrentTranscript
+  } = useTranscriptStore()
 
   const startRecording = useCallback(async () => {
     try {
@@ -35,12 +42,14 @@ export const useDeepgram = (onTranscript: (text: string) => void) => {
         }
         mediaRecorder.current.start(250)
         setIsRecording(true)
+        addMessage({ type: 'answer', text: '' })
       })
 
       connection.current.on(LiveTranscriptionEvents.Transcript, (data: any) => {
         const transcript = data.channel.alternatives[0].transcript
         if (transcript) {
-          onTranscript(transcript)
+          setCurrentTranscript(transcript)
+          updateLastMessage(transcript)
         }
       })
 
@@ -51,7 +60,7 @@ export const useDeepgram = (onTranscript: (text: string) => void) => {
     } catch (error) {
       console.error('Error starting recording:', error)
     }
-  }, [onTranscript])
+  }, [])
 
   const stopRecording = useCallback(() => {
     isConnectionOpen.current = false
@@ -68,10 +77,10 @@ export const useDeepgram = (onTranscript: (text: string) => void) => {
     mediaRecorder.current = null
     connection.current = null
     setIsRecording(false)
+    setCurrentTranscript('')
   }, [])
 
   return {
-    isRecording,
     startRecording,
     stopRecording
   }

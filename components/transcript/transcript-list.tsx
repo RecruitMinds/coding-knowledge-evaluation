@@ -1,13 +1,11 @@
 'use client'
 
-import { Message } from '@/types'
 import { ScrollArea } from '../ui/scroll-area'
+import { useTranscriptStore } from '@/store/use-transcript-store'
 
-interface TranscriptListProps {
-  messages: Message[]
-}
+const TranscriptList = () => {
+  const messages = useTranscriptStore(state => state.messages)
 
-const TranscriptList = ({ messages }: TranscriptListProps) => {
   return (
     <ScrollArea className='h-full overflow-hidden'>
       <div className='space-y-4 p-4'>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSocketStore } from '@/store/use-socket'
+import { useSocketStore } from '@/store/use-socket-store'
 import { toast } from 'sonner'
 
 interface Example {
