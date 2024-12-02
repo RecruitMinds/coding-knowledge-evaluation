@@ -5,20 +5,14 @@ import {
   LiveTranscriptionEvents
 } from '@deepgram/sdk'
 import { useTranscriptStore } from '@/store/use-transcript-store'
+import { useInterview } from './use-interview'
 
 export const useDeepgram = () => {
   const mediaRecorder = useRef<MediaRecorder | null>(null)
   const connection = useRef<ListenLiveClient | null>(null)
   const isConnectionOpen = useRef(false)
-  const transcriptTimer = useRef<NodeJS.Timeout | null>(null)
-
-  const {
-    setIsRecording,
-    addMessage,
-    updateLastMessage,
-    setPartialTranscript,
-    clearPartialTranscript
-  } = useTranscriptStore()
+  const { submitFollowUpAnswer } = useInterview()
+  const { setIsRecording, addMessage, updateLastMessage } = useTranscriptStore()
 
   const startRecording = useCallback(async () => {
     try {
@@ -49,25 +43,12 @@ export const useDeepgram = () => {
         if (transcript && transcript.trim() !== '') {
           if (data.is_final) {
             updateLastMessage(transcript)
-
-            if (transcriptTimer.current) {
-              clearTimeout(transcriptTimer.current)
-            }
-
-            transcriptTimer.current = setTimeout(() => {
-              clearPartialTranscript()
-            }, 3000)
-          } else {
-            setPartialTranscript(transcript)
           }
         }
       })
 
       connection.current.on(LiveTranscriptionEvents.Close, () => {
         isConnectionOpen.current = false
-        if (transcriptTimer.current) {
-          clearTimeout(transcriptTimer.current)
-        }
       })
     } catch (error) {
       console.error('Error starting recording:', error)
@@ -76,9 +57,6 @@ export const useDeepgram = () => {
 
   const stopRecording = useCallback(() => {
     isConnectionOpen.current = false
-    if (transcriptTimer.current) {
-      clearTimeout(transcriptTimer.current)
-    }
 
     if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
       mediaRecorder.current.stop()
@@ -89,11 +67,16 @@ export const useDeepgram = () => {
       connection.current.requestClose()
     }
 
+    // Get the last message and submit
+    const lastMessage = useTranscriptStore.getState().messages.slice(-1)[0]
+    if (lastMessage?.text) {
+      submitFollowUpAnswer(lastMessage.text)
+    }
+
     mediaRecorder.current = null
     connection.current = null
     setIsRecording(false)
-    clearPartialTranscript()
-  }, [])
+  }, [submitFollowUpAnswer])
 
   return {
     startRecording,

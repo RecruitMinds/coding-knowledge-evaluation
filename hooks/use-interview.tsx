@@ -1,19 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useSocketStore } from '@/store/use-socket-store'
 import { toast } from 'sonner'
 
-interface Example {
-  input: string
-  output: string
-  explanation: string
-}
-
-interface QuestionResponse {
-  title: string
-  description: string
-  examples: Example[]
-  constraints: string[]
-}
+import { useSocketStore } from '@/store/use-socket-store'
+import { QuestionResponse } from '@/types'
 
 interface Question {
   question: QuestionResponse

@@ -4,7 +4,7 @@ export interface Example {
   explanation: string
 }
 
-export interface Question {
+export interface QuestionResponse {
   title: string
   description: string
   examples: Example[]

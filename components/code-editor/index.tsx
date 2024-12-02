@@ -7,14 +7,11 @@ import { useInterview } from '@/hooks/use-interview'
 
 import EditorActions from './editor-actions'
 import LanguageSelector from './language-selector'
-import ConsoleOutput from './console-output'
 
 const CodeEditor = () => {
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState('javascript')
-
-  const { submitSolution, followUpQuestion, submitFollowUpAnswer } =
-    useInterview()
+  const { submitSolution } = useInterview()
 
   const handleRunCode = () => {
     // Implement code running logic if needed

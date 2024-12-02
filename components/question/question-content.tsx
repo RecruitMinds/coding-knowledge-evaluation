@@ -1,10 +1,10 @@
 'use client'
 
-import { Question } from '@/types'
+import { QuestionResponse } from '@/types'
 import { ScrollArea } from '../ui/scroll-area'
 
 interface QuestionContentProps {
-  question: Question
+  question: QuestionResponse
 }
 
 const QuestionContent = ({ question }: QuestionContentProps) => {

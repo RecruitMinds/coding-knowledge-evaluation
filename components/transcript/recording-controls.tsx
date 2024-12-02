@@ -10,7 +10,7 @@ import { useTranscriptStore } from '@/store/use-transcript-store'
 import { Button } from '@/components/ui/button'
 
 const RecordingControls = () => {
-  const { followUpQuestion, submitFollowUpAnswer } = useInterview()
+  const { followUpQuestion } = useInterview()
   const { startRecording, stopRecording } = useDeepgram()
   const { isRecording, addMessage } = useTranscriptStore()
 
