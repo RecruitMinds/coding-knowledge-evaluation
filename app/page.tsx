@@ -64,31 +64,29 @@ export default function Home() {
   }
 
   return (
-    <main className='flex h-screen bg-zinc-950'>
+    <main className='flex h-screen overflow-hidden bg-zinc-950'>
       <div className='w-full max-w-[400px] flex-none border-r border-zinc-800 bg-zinc-900 lg:max-w-[500px] 2xl:max-w-[600px]'>
         <QuestionHeader questionIndex={questionIndex} totalQuestions={3} />
         {currentQuestion && <QuestionContent question={currentQuestion} />}
       </div>
 
-      <div className='flex-auto bg-zinc-950 p-4'>
-        <div className='flex h-full flex-col overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900'>
+      <div className='flex-auto bg-zinc-950'>
+        <div className='flex h-full flex-col overflow-hidden border-x border-zinc-800 bg-zinc-900'>
           <CodeEditor />
 
           <div className='flex h-2/5 bg-zinc-900'>
             <ConsoleOutput output={output} />
-
-            <div className='flex w-2/5 flex-col'>
-              <div className='border-b border-zinc-800 px-4 py-3.5'>
-                <h3 className='text-sm font-medium text-zinc-200'>
-                  Transcript
-                </h3>
-              </div>
-              <div className='flex h-[calc(100%-48px)] flex-col'>
-                <TranscriptList messages={messages} />
-                <RecordingControls setMessages={setMessages} />
-              </div>
-            </div>
           </div>
+        </div>
+      </div>
+
+      <div className='flex w-full max-w-[350px] flex-col border-l border-zinc-800 bg-zinc-900'>
+        <div className='border-b border-zinc-800 px-4 py-[18px]'>
+          <h3 className='text-sm font-medium text-zinc-200'>Transcript</h3>
+        </div>
+        <div className='flex h-[calc(100%-58px)] flex-col'>
+          <TranscriptList messages={messages} />
+          <RecordingControls setMessages={setMessages} />
         </div>
       </div>
     </main>
