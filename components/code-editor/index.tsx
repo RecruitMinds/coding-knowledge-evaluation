@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Editor } from '@monaco-editor/react'
 
 import { useInterview } from '@/hooks/use-interview'
@@ -8,7 +8,6 @@ import { useInterview } from '@/hooks/use-interview'
 import EditorActions from './editor-actions'
 import LanguageSelector from './language-selector'
 import ConsoleOutput from './console-output'
-import { languages } from '@/constants'
 import { executeCode } from '@/actions/code-execution'
 
 const CodeEditor = () => {
@@ -16,7 +15,7 @@ const CodeEditor = () => {
   const [output, setOutput] = useState<string[]>([])
   const [language, setLanguage] = useState('javascript')
   const [isLoading, setIsLoading] = useState(false)
-  const { submitSolution } = useInterview()
+  const { submitSolution, questionIndex, currentQuestion } = useInterview()
 
   const handleRunCode = async () => {
     try {
@@ -35,6 +34,12 @@ const CodeEditor = () => {
     setOutput([])
     submitSolution(code)
   }
+
+  // clear code when question changes
+  useEffect(() => {
+    setCode('')
+    setOutput([])
+  }, [questionIndex, currentQuestion])
 
   return (
     <div className='flex h-full flex-col overflow-hidden border-x border-zinc-800 bg-zinc-900'>

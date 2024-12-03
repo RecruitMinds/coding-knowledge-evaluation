@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 import { useSocketStore } from '@/store/use-socket-store'
 import { QuestionResponse } from '@/types'
@@ -10,6 +11,7 @@ interface Question {
 }
 
 export function useInterview() {
+  const router = useRouter()
   const { socket, isConnected } = useSocketStore()
   const [currentQuestion, setCurrentQuestion] = useState<QuestionResponse>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
@@ -35,6 +37,7 @@ export function useInterview() {
 
     socket.on('interviewCompleted', () => {
       console.log('Interview completed')
+      router.push('/interview-complete')
     })
 
     // Cleanup listeners
@@ -44,7 +47,7 @@ export function useInterview() {
       socket.off('error')
       socket.off('interviewCompleted')
     }
-  }, [socket])
+  }, [socket, router])
 
   const startInterview = (invitationToken: string) => {
     if (!socket || !isConnected) return
