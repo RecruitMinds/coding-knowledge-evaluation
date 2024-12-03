@@ -26,9 +26,11 @@ const ConsoleOutput = ({ output }: ConsoleOutputProps) => {
       </div>
       <div className='flex-1 p-4'>
         <div
-          className={`h-full rounded-lg bg-zinc-800/50 p-4 font-mono text-sm ${output ? 'text-zinc-200' : 'text-zinc-400'}`}
+          className={`h-full rounded-lg bg-zinc-800/50 p-4 font-mono text-sm ${output.length > 0 ? 'text-zinc-200' : 'text-zinc-400'}`}
         >
-          {output.map((item, i) => <p key={i}>{item}</p>) || 'No output yet'}
+          {output.length > 0
+            ? output.map((item, i) => <p key={i}>{item}</p>)
+            : 'No output yet'}
         </div>
       </div>
     </div>
