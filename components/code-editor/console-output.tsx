@@ -2,7 +2,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { SquareTerminal } from 'lucide-react'
 
 interface ConsoleOutputProps {
-  output: string
+  output: string[]
 }
 
 const ConsoleOutput = ({ output }: ConsoleOutputProps) => {
@@ -25,8 +25,10 @@ const ConsoleOutput = ({ output }: ConsoleOutputProps) => {
         </ToggleGroup>
       </div>
       <div className='flex-1 p-4'>
-        <div className='h-full rounded-lg bg-zinc-800/50 p-4 font-mono text-sm text-zinc-400'>
-          {output || 'No output yet'}
+        <div
+          className={`h-full rounded-lg bg-zinc-800/50 p-4 font-mono text-sm ${output ? 'text-zinc-200' : 'text-zinc-400'}`}
+        >
+          {output.map((item, i) => <p key={i}>{item}</p>) || 'No output yet'}
         </div>
       </div>
     </div>

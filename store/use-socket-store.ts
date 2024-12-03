@@ -8,7 +8,7 @@ interface SocketStore {
 }
 
 export const useSocketStore = create<SocketStore>(set => {
-  const socket = io('http://localhost:3000/interview', {
+  const socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL, {
     autoConnect: true
   })
 

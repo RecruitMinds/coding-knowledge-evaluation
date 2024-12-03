@@ -18,7 +18,6 @@ export default function Home() {
   const invitationToken = searchParams.get('token')
   const { isConnected } = useSocketStore()
   const { startInterview, currentQuestion, questionIndex } = useInterview()
-  const [output, setOutput] = useState('')
 
   useEffect(() => {
     if (invitationToken && isConnected) {
@@ -38,13 +37,7 @@ export default function Home() {
       </div>
 
       <div className='flex-auto bg-zinc-950'>
-        <div className='flex h-full flex-col overflow-hidden border-x border-zinc-800 bg-zinc-900'>
-          <CodeEditor />
-
-          <div className='flex h-2/5 bg-zinc-900'>
-            <ConsoleOutput output={output} />
-          </div>
-        </div>
+        <CodeEditor />
       </div>
 
       <div className='flex w-full max-w-[350px] flex-col border-l border-zinc-800 bg-zinc-900'>

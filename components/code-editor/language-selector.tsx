@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { languages } from '@/constants'
 
 interface LanguageSelectorProps {
   value: string
@@ -15,25 +16,20 @@ interface LanguageSelectorProps {
 }
 
 const LanguageSelector = ({ value, onValueChange }: LanguageSelectorProps) => {
-  const languages = [
-    { value: 'c++', label: 'C++' },
-    { value: 'c#', label: 'C#' },
-    { value: 'java', label: 'Java' },
-    { value: 'javascript', label: 'JavaScript' },
-    { value: 'python', label: 'Python' },
-    { value: 'typescript', label: 'TypeScript' }
-  ]
-
   return (
     <Select defaultValue={value} onValueChange={onValueChange}>
-      <SelectTrigger className='w-40 border border-zinc-800 bg-zinc-900 text-zinc-200 hover:bg-zinc-800/80'>
+      <SelectTrigger className='w-44 border border-zinc-800 bg-zinc-900 text-zinc-200 hover:bg-zinc-800/80'>
         <SelectValue placeholder='Select language' />
       </SelectTrigger>
-      <SelectContent className='border-zinc-800 bg-zinc-900 text-zinc-200'>
+      <SelectContent className='max-h-64 border-zinc-800 bg-zinc-900 text-zinc-200'>
         <SelectGroup>
-          {languages.map(({ value, label }) => (
-            <SelectItem key={value} value={value} className='hover:bg-zinc-800'>
-              {label}
+          {languages.map(({ name, version }) => (
+            <SelectItem
+              key={name}
+              value={name}
+              className='py-2 hover:bg-zinc-800'
+            >
+              {name} ({version})
             </SelectItem>
           ))}
         </SelectGroup>
